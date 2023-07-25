@@ -1,0 +1,27 @@
+name: 'Notion release notes'
+description: 'Creates a new page in an existing database to capture release notes'
+branding:
+  icon: type
+  color: green
+inputs:
+  token:
+    description: 'Notion API token'
+    required: true
+  database:
+    description: 'Parent database to add to'
+    required: true
+  name:
+    description: 'Name for the release'
+    required: true
+  changelog:
+    description: 'Body content for release notes'
+    required: true
+  environment:
+    description: 'Environment'
+    required: false
+outputs:
+  status:
+    description: 'The status of the update'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
