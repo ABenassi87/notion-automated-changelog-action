@@ -14,11 +14,11 @@ inputs:
     description: 'Name for the release'
     required: true
   changelog:
-    description: 'Body content for release notes'
+    description: 'Changelog'
     required: true
   environment:
     description: 'Environment'
-    required: false
+    required: true
 outputs:
   status:
     description: 'The status of the update'
