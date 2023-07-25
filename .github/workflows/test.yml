@@ -20,6 +20,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Get Diffs
+        id: get_diffs
+        run: |
+          git fetch
+          GitDiffs=$(env -i git --no-pager log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative $CI_COMMIT_BEFORE_SHA..$CI_COMMIT_SHA)
+          echo "$GitDiffs"
+          echo "changelog=$GitDiffs" >> $GITHUB_OUTPUT
+        env:
+          CI_COMMIT_BEFORE_SHA: ${{ github.event.before }}
+          CI_COMMIT_SHA: ${{ github.event.after }}
+
+      - name: Set short git commit SHA
+        id: vars
+        run: |
+          calculatedSha=$(git rev-parse --short ${{ github.sha }})
+          echo "short_sha=$calculatedSha" >> $GITHUB_OUTPUT
       - uses: ./
         with:
-          milliseconds: 1000
+          token: ${{ secrets.NOTION_TOKEN }}
+          database: ${{ secrets.DB_NOTION }}
+          name: ${{ steps.vars.outputs.short_sha }}
+          environment: ${{ github.ref_name }}
+          changelog: ${{ steps.get_diffs.outputs.changelog }}
