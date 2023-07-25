@@ -1,6 +1,5 @@
 const core = require('@actions/core');
 const { Client, LogLevel } = require('@notionhq/client');
-const process = require("node:process");
 
 function main() {
   try {
